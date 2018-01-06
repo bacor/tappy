@@ -47,9 +47,9 @@ module.exports = {
       title: 'Development',
     }),
     new webpack.NamedModulesPlugin(),
-    // new webpack.HotModuleReplacementPlugin(),
-    new UglifyJsPlugin({
-      test: /\.js($|\?)/i,
-    }),
+    new webpack.HotModuleReplacementPlugin(),
+    // new UglifyJsPlugin({
+    //   test: /\.js($|\?)/i,
+    // }),
   ],
 };
