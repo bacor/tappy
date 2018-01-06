@@ -2,7 +2,7 @@ import React from 'react';
 import paper from 'paper';
 import _ from 'lodash';
 
-class Circle extends React.Component {
+class Circle extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {};
@@ -23,10 +23,12 @@ class Circle extends React.Component {
 
   render() {
     return (
-      <canvas ref={(c) => { this.canvas = c; }}
-        height={2 * this.props.radius}
-        width={2 * this.props.radius}
-        resize="true"></canvas>
+      <div>
+        <canvas ref={(c) => { this.canvas = c; }}
+          height={2 * this.props.radius}
+          width={2 * this.props.radius}
+          resize="true"></canvas>
+      </div>
     );
   }
 

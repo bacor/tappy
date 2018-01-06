@@ -1,21 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import RhythmCircle from './components/RhythmCircle.jsx';
+import Tappy from './components/Tappy.jsx';
 import './styles/reset.scss';
 import './styles/style.scss';
 
 // App
 const App = () => (
-  <div>
-    <MuiThemeProvider>
-      <div className="rhythm-circle-container">
-        <RhythmCircle width={450} height={400} innerPad={10} />
-      </div>
-    </MuiThemeProvider>
-
-    <div className="phaseplot-container"></div>
-  </div>
+  <MuiThemeProvider>
+    <Tappy width={450} height={400} />
+  </MuiThemeProvider>
 );
 
 // Container

@@ -27,12 +27,16 @@ module.exports = {
           loader: 'babel-loader',
           options: { presets: ['react', 'env'] },
         },
-        'eslint-loader',
+        // 'eslint-loader',
       ],
     },
     {
-      test: /\.scss/,
+      test: /\.s?css/,
       use: ['style-loader', 'css-loader', 'sass-loader'],
+    },
+    {
+      test: /\.(ogg|mp3|wav|mpe?g)$/i,
+      use: 'file-loader',
     }],
   },
 
