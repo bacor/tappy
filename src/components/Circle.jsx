@@ -10,6 +10,7 @@ class Circle extends React.PureComponent {
     // Flag used to skip the first onFrame call
     this.wasPaused = false;
     this.outerDots = [];
+    this.initAngle = 0;
   }
 
   componentWillMount() {
@@ -59,9 +60,9 @@ class Circle extends React.PureComponent {
     this.innerCircle.strokeWidth = this.props.strokeWidth;
     this.innerCircle.strokeColor = this.props.color;
 
-    this.outerCircle = new paper.Path.Circle(center, this.outerRadius);
-    this.outerCircle.strokeWidth = this.outerStrokeWidth;
-    this.outerCircle.strokeColor = this.props.color;
+    // this.outerCircle = new paper.Path.Circle(center, this.outerRadius);
+    // this.outerCircle.strokeWidth = this.outerStrokeWidth;
+    // this.outerCircle.strokeColor = this.props.color;
 
     // Position marker on inner circle
     const initPosMarkerPos = new paper.Point({
@@ -107,6 +108,7 @@ class Circle extends React.PureComponent {
     } else {
       this.trajectory.removeSegments();
       this.tapMarkers.removeChildren();
+
       for (let i = 0; i < this.props.data.length; i += 1) {
         this.addDataPoint(this.props.data[i]);
       }
@@ -114,14 +116,14 @@ class Circle extends React.PureComponent {
   }
 
   addDataPoint(time) {
-    const angle = (this.props.frequency * 360 * time) % 360;
     const pos = new paper.Point({
-      angle,
+      angle: this.timeToAngle(time),
       length: this.innerRadius,
     });
 
     // Add trajectory segment
     this.trajectory.add(pos);
+    this.posMarker.position = pos;
 
     // Add tapmarker
     pos.length = this.outerRadius;
@@ -140,6 +142,10 @@ class Circle extends React.PureComponent {
     this.posMarker.position = this.posMarker.position.rotate(angle, this.center);
     this.posMarker.data.time = event.time;
   }
+
+  timeToAngle(t) {
+    return ((t / 1000) * this.props.frequency * 360) % 360;
+  }
 }
 
 Circle.defaultProps = {
@@ -150,12 +156,11 @@ Circle.defaultProps = {
   play: true,
   color: '#ff0000',
   strokeWidth: 2,
-  outerStrokeWidth: 0.3,
+  outerStrokeWidth: 0.5,
   tapMarkerColor: '#000',
   tapMarkerOpacity: 0.3,
   tapMarkerRadius: 2,
   posMarkerRadius: 7,
-  initPosMarkerAngle: 0,
   trajectoryColor: '#000',
   trajectoryWidth: 0.5,
 };

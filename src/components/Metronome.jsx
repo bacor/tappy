@@ -1,7 +1,13 @@
 import React from 'react';
 import Slider from 'material-ui/Slider';
 import TextField from 'material-ui/TextField';
+import FlatButton from 'material-ui/FlatButton';
+import VolumeUp from 'material-ui/svg-icons/av/volume-up';
+import VolumeOff from 'material-ui/svg-icons/av/volume-off';
 import _ from 'lodash';
+import { Howl } from 'howler';
+import Bongo53 from '../samples/Tribal-Bongo-53.wav';
+
 
 function bpmToHerz(bpm) {
   return bpm / 60;
@@ -23,11 +29,25 @@ class Metronome extends React.Component {
       bpm: undefined,
       error: undefined,
       textFieldValue: '',
+      play: undefined,
     };
+
+    this.interval = 0;
   }
 
   componentWillMount() {
-    this.setState({ bpm: this.props.initBpm });
+    this.setState({
+      bpm: this.props.initBpm,
+      play: this.props.autoplay,
+    });
+    this.tick = new Howl({
+      src: [Bongo53],
+      preload: true,
+    });
+  }
+
+  componentDidMount() {
+    this.updateTick();
   }
 
   render() {
@@ -63,13 +83,33 @@ class Metronome extends React.Component {
           defaultValue={0}
           onDragStop={this.handleFineSliderDragStop.bind(this)}
           onChange={this.handleFineSliderChange.bind(this)} />
+
+        <FlatButton
+          ref={ (el) => { this.toggleTick = el; }}
+          primary={true}
+          icon={this.state.play ? <VolumeOff /> : <VolumeUp />}
+          onClick={ this.handleToggleTick.bind(this) } />
       </div>
     );
   }
 
   componentWillUpdate(nextProps, nextState) {
-    if (nextState.bpm !== this.state.bpm) {
+    if (nextState.bpm !== this.state.bpm || this.state.play != nextState.play) {
       this.props.onChange(nextState.bpm);
+      this.updateTick(nextState);
+    }
+  }
+
+  updateTick(nextState) {
+    const state = nextState || this.state;
+    if (state.play) {
+      clearInterval(this.interval);
+      const period = (1 / bpmToHerz(this.state.bpm)) * 1000;
+      this.interval = setInterval(() => {
+        this.tick.play();
+      }, period);
+    } else {
+      clearInterval(this.interval);
     }
   }
 
@@ -129,6 +169,10 @@ class Metronome extends React.Component {
     this.bpmBeforeRefinment = undefined;
     this.fineSlider.setState({ value: 0 });
   }
+
+  handleToggleTick() {
+    this.setState({ play: !this.state.play });
+  }
 }
 
 Metronome.defaultProps = {
@@ -137,6 +181,7 @@ Metronome.defaultProps = {
   maxBpm: 100,
   displayPrecision: 3,
   refinement: 2,
+  autoplay: true,
 };
 
 export {

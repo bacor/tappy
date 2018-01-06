@@ -33,7 +33,7 @@ class Tappy extends React.Component {
             radius={this.radius}
             color={this.props.muiTheme.palette.primary1Color}
             data={this.state.times}
-            frequency={bpmToHerz(this.state.bpm)}
+            frequency={bpmToHerz(this.state.bpm) / 2}
             play={true} />
 
           <PhasePlot ref={ (c) => { this.phasePlot = c; }}
@@ -83,9 +83,9 @@ class Tappy extends React.Component {
 Tappy.defaultProps = {
   width: 400,
   height: 400,
-  initBpm: 30,
-  minBpm: 1,
-  maxBpm: 100,
+  initBpm: 100,
+  minBpm: 30,
+  maxBpm: 160,
   times: [], // [0, 2, 3, 4, 6, 7, 8, 10, 11, 12, 14, 15], // [0.5, 0.8, 1.3, 1.6],
 };
 

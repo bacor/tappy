@@ -12,17 +12,6 @@ class Tap extends React.Component {
     this.state = {};
   }
 
-  componentWillMount() {
-    this.bongos = {
-      bongo15: Bongo15,
-      bongo53: Bongo53,
-      bongo56: Bongo56,
-    };
-    this.sound = new Howl({
-      src: [this.bongos[this.props.bongo]],
-    });
-  }
-
   render() {
     return (
       <FloatingActionButton
@@ -34,6 +23,19 @@ class Tap extends React.Component {
     );
   }
 
+  componentDidMount() {
+    this.bongos = {
+      bongo15: Bongo15,
+      bongo53: Bongo53,
+      bongo56: Bongo56,
+    };
+    this.sound = new Howl({
+      src: [this.bongos[this.props.bongo]],
+      preload: true,
+      volume: .8,
+    });
+  }
+
   handleTap() {
     this.sound.play();
     this.props.onTap();
@@ -41,7 +43,7 @@ class Tap extends React.Component {
 }
 
 Tap.defaultProps = {
-  bongo: 'bongo53',
+  bongo: 'bongo56',
   onTap: () => {},
 };
 
